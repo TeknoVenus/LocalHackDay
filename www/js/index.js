@@ -28,7 +28,7 @@ var app = {
     // Application Constructor
     initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-        app.levelStart(1, 7, 5);
+        app.levelStart(1, 7, 50);
     },
 
     genList: function (x, y, n) {//Generates a random array
@@ -45,20 +45,22 @@ var app = {
         }
     },
 
-    updateLevel: function () {
-        var currentNFC = levelList[itemIterator];
-        var nextNFC = levelList[itemIterator + 1];
-        if (itemIterator == levelList.length) {
-            levelComplete = true;
-        }
-        if (readNFC == nextNFC) {
-            itemIterator += 1;
-            console.log("Your next tag is " + nextNFC);
-        }
+    updateLevel: function(){
+      var currentNFC = levelList[itemIterator];
+      var nextNFC = levelList[itemIterator + 1];
+      if (itemIterator == levelList.length){
+        levelComplete = true;
+      }
+      if (readNFC == nextNFC){
+        itemIterator += 1;
+        console.log("SUCCESS");
+      }
     },
 
-    levelStart: function (x, amountOfTags, difficulty) {//Initialises and handles levels
-        levelList = app.genList(x, amountOfTags, difficulty);
+    levelStart: function(x, amountOfTags, difficulty){//Initialises and handles levels
+      levelList = app.genList(x, amountOfTags, difficulty);
+      currentNFC = levelList[0];
+      nextNFC = levelList[1];
     },
 
     showSteps: function (nextNFC, clear) {
@@ -78,9 +80,9 @@ var app = {
     },
 
 
-    //GET LEVEL array
+     //GET LEVEL array
 
-    //START - Timer start, show next tag
+     //START - Timer start, show next tag
 
 
     // deviceready Event Handler
@@ -110,14 +112,19 @@ var app = {
         var tagValue = nfc.bytesToString(nfcEvent.tag.ndefMessage[0].payload);
         document.querySelector("#nfc").innerText = tagValue;
         readNFC = parseInt(tagValue);
-        if (app.isNext()) {
-            currentNFC = readNFC;
+        if (app.isNext()){
+          console.log("IS NEXT");
         }
         app.updateLevel();
-        console.log("Next tag to be read is " + nextNFC);
-        console.log("The last tag read was " + currentNFC);
-        app.showSteps(nextNFC);
-    }
+        console.log("The read tag was "+readNFC);
+        console.log("Next tag to be read is "+nextNFC);
+        console.log("The last current tag is "+currentNFC);
+    },
+
+
+
+
+
 
 
 };
