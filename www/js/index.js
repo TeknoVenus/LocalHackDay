@@ -25,6 +25,7 @@ var levelComplete = false;
 var levelList;
 var difficulty = 1;
 var totalSeconds = 0;
+var colours = ["red", "rebeccapurple", "blue", "cyan", "yellow", "green", "white"];
 
 var app = {
     // Application Constructor
@@ -52,6 +53,8 @@ var app = {
     updateLevel: function(){
       var currentNFC = levelList[itemIterator];
       var nextNFC = levelList[itemIterator + 1];
+      document.body.style.background = colours[itemIterator];
+
       if (readNFC == nextNFC){
         itemIterator += 1;
         console.log("SUCCESS");
