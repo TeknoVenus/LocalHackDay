@@ -25,7 +25,7 @@ var levelComplete = false;
 var levelList;
 var difficulty = 2;
 var totalSeconds = 0;
-var colours = ["red", "rebeccapurple", "blue", "cyan", "yellow", "green", "white"];
+var colours = ["rgb(220,30,120)", "rgb(230,50,20)", "rgb(130,20,140)", "tgb(150,230,50)", "rgb(230,230,50)", "rgb(40, 180, 230)", "rgb(250, 110, 10)"];
 var score = 0;
 var scoreboard = document.getElementById("score");
 var countdown = 3;
