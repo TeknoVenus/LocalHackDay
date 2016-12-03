@@ -16,33 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
- var t = Date()
- function genList(x, y, n){
-   var array = Array(n);
-   for (var i = 0; i < n; i++){
-     array[i] = Math.round((Math.random()*y)-x);
-   }
-   return array;
- }
-
-function levelStart(x, amountOfTags, difficulty){
-  levelList = genList(x, amountOfTags, difficulty);
-  var dt = t.getDate();
-
-
-  return dt;
-}
-
-function game(){
-  var x = 1;
-  var difficulty = 4;
-  var amountOfTags = 3;
-
-  levelStart(x, amountOfTags, difficulty);
-  //GET LEVEL array
-
-  //START - Timer start, show next tag
-}
+var readNFC = 0;
 
 var app = {
     // Application Constructor
@@ -112,10 +86,59 @@ var app = {
         }
 
         alert("NDEF");
+        //currentNFC = tag.id;
         alert(app.tagTemplate(tag));
 
         navigator.notification.vibrate(100);
     }
 };
+
+var t = Date()
+function genList(x, y, n){
+  var array = Array(n);
+  for (var i = 0; i < n; i++){
+    array[i] = Math.round((Math.random()*y)-x);
+  }
+  return array;
+}
+
+function levelStart(x, amountOfTags, difficulty){
+  levelList = genList(x, amountOfTags, difficulty);
+  var t1 = t.getDate();
+
+  var itemIterator = 0;
+  var levelComplete = false;
+  while(levelComplete == false){
+    var currentNFC = levelList[itemIterator];
+    var nextNFC = levelList[itemIterator + 1];
+    if (itemIterator == levelList.length){
+      levelComplete = true;
+    }
+    if (readNFC == nextNFC){
+      itemIterator += 1;
+      console.log("Your next tag is " + nextNFC);
+    }
+    else{
+      console.log("SEARCHING");
+
+
+    }
+  }
+  var t2 = t.getDate();
+  return t2 - t1;
+}
+
+
+function game(){
+  var x = 1;
+  var difficulty = 4;
+  var amountOfTags = 3;
+
+  var score1 = levelStart(x, amountOfTags, difficulty);
+  console.log(score1);
+ //GET LEVEL array
+
+ //START - Timer start, show next tag
+}
 
 app.initialize();
