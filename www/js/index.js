@@ -63,12 +63,17 @@ var app = {
       if (readNFC == nextNFC){
         itemIterator += 1;
         console.log("SUCCESS");
+        readNFC = "";
         score += difficulty;
         currentNFC = levelList[itemIterator];
         nextNFC = levelList[itemIterator + 1];
 
 
       }
+
+
+
+
       if (!(Number.isInteger(nextNFC))){
         console.log("NEXT LEVEL");
         itemIterator = 0;
@@ -170,8 +175,23 @@ var app = {
         var tagValue = nfc.bytesToString(nfcEvent.tag.ndefMessage[0].payload);
         document.querySelector("#nfc").innerText = tagValue;
         readNFC = parseInt(tagValue);
+          document.body.style.background = colours[readNFC];
+        if (readNFC != levelList[itemIterator+1]){
+          console.log(readNFC);
+          console.log(nextNFC);
+        alert("GAME OVER!");
+        location.reload();
+      }
         app.updateLevel();
-        document.body.style.background = colours[readNFC];
+
+
+
+
+
+
+
+
+
         console.log("The read tag was " + readNFC);
         console.log("Next tag to be read is " + levelList[itemIterator + 1]);
     },
