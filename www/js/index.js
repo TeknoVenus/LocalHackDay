@@ -25,6 +25,7 @@ var levelComplete = false;
 var levelList;
 var difficulty = 1;
 var totalSeconds = 0;
+var colours = ["red", "rebeccapurple", "blue", "cyan", "yellow", "green", "white"];
 
 var app = {
     // Application Constructor
@@ -49,22 +50,23 @@ var app = {
         }
     },
 
-    updateLevel: function () {
-        var currentNFC = levelList[itemIterator];
-        var nextNFC = levelList[itemIterator + 1];
-        if (readNFC == nextNFC) {
-            itemIterator += 1;
-            console.log("SUCCESS");
-            currentNFC = levelList[itemIterator];
-            nextNFC = levelList[itemIterator + 1];
-        } else {
-            alert("You're a failure");
-        }
-        if (!(nextNFC in levelList)) {
-            console.log("NEXT LEVEL");
-            difficulty += 1;
-            app.levelStart(0, 6, difficulty);
-        }
+    updateLevel: function(){
+      var currentNFC = levelList[itemIterator];
+      var nextNFC = levelList[itemIterator + 1];
+      document.body.style.background = colours[itemIterator];
+
+      if (readNFC == nextNFC){
+        itemIterator += 1;
+        console.log("SUCCESS");
+        currentNFC = levelList[itemIterator];
+        nextNFC = levelList[itemIterator + 1];
+
+      }
+      if (!(nextNFC in levelList)){
+        console.log("NEXT LEVEL");
+        difficulty += 1;
+        app.levelStart(0, 6, difficulty);
+      }
     },
 
     levelStart: function (x, amountOfTags, difficulty) {//Initialises and handles levels
