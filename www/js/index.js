@@ -24,6 +24,7 @@ var itemIterator = 0;
 var levelComplete = false;
 var levelList;
 var difficulty = 1;
+var totalSeconds = 0;
 
 var app = {
     // Application Constructor
@@ -31,6 +32,7 @@ var app = {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         app.levelStart(0, 6, difficulty);
         console.log(levelList);
+        app.timer();
     },
 
     genList: function(x, y, n){//Generates a random array
@@ -41,11 +43,11 @@ var app = {
       return array;
     },
 
-    isNext: function(){
-      if (readNFC == nextNFC){
-        return true;
-    }
-  },
+    isNext: function () {
+        if (readNFC == nextNFC) {
+            return true;
+        }
+    },
 
     updateLevel: function(){
       var currentNFC = levelList[itemIterator];
@@ -64,23 +66,47 @@ var app = {
       }
     },
 
-    levelStart: function(x, amountOfTags, difficulty){//Initialises and handles levels
-      levelList = app.genList(x, amountOfTags, difficulty);
-      currentNFC = levelList[0];
-      nextNFC = levelList[1];
+    levelStart: function (x, amountOfTags, difficulty) {//Initialises and handles levels
+        levelList = app.genList(x, amountOfTags, difficulty);
+        currentNFC = levelList[0];
+        nextNFC = levelList[1];
+    },
+
+    showSteps: function (nextNFC, clear) {
+        var modal = document.querySelector('.modal');
+        modal.style.display = "block";
+        if (clear) {
+            document.querySelector('#instructions #list').innerHTML = '';
+        }
+
+        var node = document.createElement("li");
+        var text = document.createTextNode(nextNFC.toString());
+        node.appendChild(text);
+        document.querySelector('#instructions #list').appendChild(node);
+        window.setTimeout(function () {
+            modal.style.display = "none";
+        }, 2000)
+    },
+
+    timer: function () {
+        setInterval(function() {
+            totalSeconds += 1;
+            document.querySelector('#secs').innerText = totalSeconds%60;
+            document.querySelector('#mins').innerText = parseInt(totalSeconds / 60);
+        }, 1000)
     },
 
 
-     //GET LEVEL array
+    //GET LEVEL array
 
-     //START - Timer start, show next tag
+    //START - Timer start, show next tag
 
 
     // deviceready Event Handler
     //
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
-    onDeviceReady: function(){
+    onDeviceReady: function () {
         function failure(reason) {
             alert("There was a problem - " + reason);
         }
@@ -93,8 +119,6 @@ var app = {
             },
             failure
         );
-
-
     },
     onNdef: function (nfcEvent) {
         navigator.vibrate(300);
@@ -115,9 +139,6 @@ var app = {
 
 
 };
-
-
-
 
 
 app.initialize();
