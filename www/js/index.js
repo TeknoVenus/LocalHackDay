@@ -31,47 +31,63 @@ var app = {
         app.levelStart(1, 7, 5);
     },
 
-    genList: function(x, y, n){//Generates a random array
-      var array = new Array(n);
-      for (var i = 0; i < n; i++){
-        array[i] = Math.round((Math.random()*y)-x);
-      }
-      return array;
+    genList: function (x, y, n) {//Generates a random array
+        var array = new Array(n);
+        for (var i = 0; i < n; i++) {
+            array[i] = Math.round((Math.random() * y) - x);
+        }
+        return array;
     },
 
-    isNext: function(){
-      if (readNFC == nextNFC){
-        return true;
-    }
-  },
-
-    updateLevel: function(){
-      var currentNFC = levelList[itemIterator];
-      var nextNFC = levelList[itemIterator + 1];
-      if (itemIterator == levelList.length){
-        levelComplete = true;
-      }
-      if (readNFC == nextNFC){
-        itemIterator += 1;
-        console.log("Your next tag is " + nextNFC);
-      }
+    isNext: function () {
+        if (readNFC == nextNFC) {
+            return true;
+        }
     },
 
-    levelStart: function(x, amountOfTags, difficulty){//Initialises and handles levels
-      levelList = app.genList(x, amountOfTags, difficulty);
+    updateLevel: function () {
+        var currentNFC = levelList[itemIterator];
+        var nextNFC = levelList[itemIterator + 1];
+        if (itemIterator == levelList.length) {
+            levelComplete = true;
+        }
+        if (readNFC == nextNFC) {
+            itemIterator += 1;
+            console.log("Your next tag is " + nextNFC);
+        }
+    },
+
+    levelStart: function (x, amountOfTags, difficulty) {//Initialises and handles levels
+        levelList = app.genList(x, amountOfTags, difficulty);
+    },
+
+    showSteps: function (nextNFC, clear) {
+        var modal = document.querySelector('.modal');
+        modal.style.display = "block";
+        if (clear) {
+            document.querySelector('#instructions #list').innerHTML = '';
+        }
+
+        var node = document.createElement("li");
+        var text = document.createTextNode(nextNFC.toString());
+        node.appendChild(text);
+        document.querySelector('#instructions #list').appendChild(node);
+        window.setTimeout(function () {
+            modal.style.display = "none";
+        }, 2000)
     },
 
 
-     //GET LEVEL array
+    //GET LEVEL array
 
-     //START - Timer start, show next tag
+    //START - Timer start, show next tag
 
 
     // deviceready Event Handler
     //
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
-    onDeviceReady: function(){
+    onDeviceReady: function () {
         function failure(reason) {
             alert("There was a problem - " + reason);
         }
@@ -89,29 +105,22 @@ var app = {
     },
     onNdef: function (nfcEvent) {
         navigator.vibrate(300);
-        console.log(JSON.stringify(nfcEvent));
+        // console.log(JSON.stringify(nfcEvent));
         var tagData = nfcEvent.tag;
         var tagValue = nfc.bytesToString(nfcEvent.tag.ndefMessage[0].payload);
         document.querySelector("#nfc").innerText = tagValue;
         readNFC = parseInt(tagValue);
-        if (app.isNext()){
-          currentNFC = readNFC;
+        if (app.isNext()) {
+            currentNFC = readNFC;
         }
         app.updateLevel();
-        console.log("Next tag to be read is "+nextNFC);
-        console.log("The last tag read was "+currentNFC);
-    },
-
-
-
-
-
+        console.log("Next tag to be read is " + nextNFC);
+        console.log("The last tag read was " + currentNFC);
+        app.showSteps(nextNFC);
+    }
 
 
 };
-
-
-
 
 
 app.initialize();
