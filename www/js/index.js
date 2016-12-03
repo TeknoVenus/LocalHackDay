@@ -23,12 +23,14 @@ var t = new Date();
 var itemIterator = 0;
 var levelComplete = false;
 var levelList;
+var totalSeconds = 0;
 
 var app = {
     // Application Constructor
     initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
         app.levelStart(1, 7, 50);
+        app.timer();
     },
 
     genList: function (x, y, n) {//Generates a random array
@@ -45,22 +47,22 @@ var app = {
         }
     },
 
-    updateLevel: function(){
-      var currentNFC = levelList[itemIterator];
-      var nextNFC = levelList[itemIterator + 1];
-      if (itemIterator == levelList.length){
-        levelComplete = true;
-      }
-      if (readNFC == nextNFC){
-        itemIterator += 1;
-        console.log("SUCCESS");
-      }
+    updateLevel: function () {
+        var currentNFC = levelList[itemIterator];
+        var nextNFC = levelList[itemIterator + 1];
+        if (itemIterator == levelList.length) {
+            levelComplete = true;
+        }
+        if (readNFC == nextNFC) {
+            itemIterator += 1;
+            console.log("SUCCESS");
+        }
     },
 
-    levelStart: function(x, amountOfTags, difficulty){//Initialises and handles levels
-      levelList = app.genList(x, amountOfTags, difficulty);
-      currentNFC = levelList[0];
-      nextNFC = levelList[1];
+    levelStart: function (x, amountOfTags, difficulty) {//Initialises and handles levels
+        levelList = app.genList(x, amountOfTags, difficulty);
+        currentNFC = levelList[0];
+        nextNFC = levelList[1];
     },
 
     showSteps: function (nextNFC, clear) {
@@ -78,11 +80,19 @@ var app = {
             modal.style.display = "none";
         }, 2000)
     },
+    
+    timer: function () {
+        setInterval(function() {
+            totalSeconds += 1;
+            document.querySelector('#secs').innerText = totalSeconds%60;
+            document.querySelector('#mins').innerText = parseInt(totalSeconds / 60);
+        }, 1000)
+    },
 
 
-     //GET LEVEL array
+    //GET LEVEL array
 
-     //START - Timer start, show next tag
+    //START - Timer start, show next tag
 
 
     // deviceready Event Handler
@@ -102,8 +112,6 @@ var app = {
             },
             failure
         );
-
-
     },
     onNdef: function (nfcEvent) {
         navigator.vibrate(300);
@@ -112,21 +120,14 @@ var app = {
         var tagValue = nfc.bytesToString(nfcEvent.tag.ndefMessage[0].payload);
         document.querySelector("#nfc").innerText = tagValue;
         readNFC = parseInt(tagValue);
-        if (app.isNext()){
-          console.log("IS NEXT");
+        if (app.isNext()) {
+            console.log("IS NEXT");
         }
         app.updateLevel();
-        console.log("The read tag was "+readNFC);
-        console.log("Next tag to be read is "+nextNFC);
-        console.log("The last current tag is "+currentNFC);
-    },
-
-
-
-
-
-
-
+        console.log("The read tag was " + readNFC);
+        console.log("Next tag to be read is " + nextNFC);
+        console.log("The last current tag is " + currentNFC);
+    }
 };
 
 
