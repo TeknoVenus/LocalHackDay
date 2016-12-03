@@ -35,12 +35,12 @@ var app = {
         app.timer();
     },
 
-    genList: function(x, y, n){//Generates a random array
-      var array = new Array(n);
-      for (var i = 0; i < n; i++){
-        array[i] = Math.round((Math.random()*y)+x);
-      }
-      return array;
+    genList: function (x, y, n) {//Generates a random array
+        var array = new Array(n);
+        for (var i = 0; i < n; i++) {
+            array[i] = Math.round((Math.random() * y) + x);
+        }
+        return array;
     },
 
     isNext: function () {
@@ -49,40 +49,45 @@ var app = {
         }
     },
 
-    updateLevel: function(){
-      var currentNFC = levelList[itemIterator];
-      var nextNFC = levelList[itemIterator + 1];
-      if (readNFC == nextNFC){
-        itemIterator += 1;
-        console.log("SUCCESS");
-        currentNFC = levelList[itemIterator];
-        nextNFC = levelList[itemIterator + 1];
-
-      }
-      if (!(nextNFC in levelList)){
-        console.log("NEXT LEVEL");
-        difficulty += 1;
-        app.levelStart(0, 6, difficulty);
-      }
+    updateLevel: function () {
+        var currentNFC = levelList[itemIterator];
+        var nextNFC = levelList[itemIterator + 1];
+        if (readNFC == nextNFC) {
+            itemIterator += 1;
+            console.log("SUCCESS");
+            currentNFC = levelList[itemIterator];
+            nextNFC = levelList[itemIterator + 1];
+        } else {
+            alert("You're a failure");
+        }
+        if (!(nextNFC in levelList)) {
+            console.log("NEXT LEVEL");
+            difficulty += 1;
+            app.levelStart(0, 6, difficulty);
+        }
     },
 
     levelStart: function (x, amountOfTags, difficulty) {//Initialises and handles levels
         levelList = app.genList(x, amountOfTags, difficulty);
         currentNFC = levelList[0];
         nextNFC = levelList[1];
-        app.showSteps();
+        if (levelList.length > 1) {
+            app.showSteps();
+        }
     },
 
     showSteps: function () {
         var modal = document.querySelector('.modal');
         modal.style.display = "block";
-            document.querySelector('#instructions #list').innerHTML = '';
+        document.querySelector('#instructions #list').innerHTML = '';
 
-        levelList.forEach(function(item, index) {
-            var node = document.createElement("li");
-            var text = document.createTextNode(item.toString());
-            node.appendChild(text);
-            document.querySelector('#instructions #list').appendChild(node);
+        levelList.forEach(function (item, index) {
+            if (index > 0) {
+                var node = document.createElement("li");
+                var text = document.createTextNode(item.toString());
+                node.appendChild(text);
+                document.querySelector('#instructions #list').appendChild(node);
+            }
         });
 
         window.setTimeout(function () {
@@ -91,9 +96,9 @@ var app = {
     },
 
     timer: function () {
-        setInterval(function() {
+        setInterval(function () {
             totalSeconds += 1;
-            document.querySelector('#secs').innerText = totalSeconds%60;
+            document.querySelector('#secs').innerText = totalSeconds % 60;
             document.querySelector('#mins').innerText = parseInt(totalSeconds / 60);
         }, 1000)
     },
@@ -130,14 +135,9 @@ var app = {
         document.querySelector("#nfc").innerText = tagValue;
         readNFC = parseInt(tagValue);
         app.updateLevel();
-        console.log("The read tag was "+readNFC);
-        console.log("Next tag to be read is "+ levelList[itemIterator + 1]);
+        console.log("The read tag was " + readNFC);
+        console.log("Next tag to be read is " + levelList[itemIterator + 1]);
     },
-
-
-
-
-
 
 
 };
