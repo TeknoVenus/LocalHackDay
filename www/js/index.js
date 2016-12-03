@@ -61,18 +61,22 @@ var app = {
         currentNFC = levelList[itemIterator];
         nextNFC = levelList[itemIterator + 1];
 
+
       }
-      if (!(nextNFC in levelList)){
+      if (!(Number.isInteger(nextNFC))){
         console.log("NEXT LEVEL");
+        itemIterator = 0;
         difficulty += 1;
         app.levelStart(0, 6, difficulty);
       }
     },
 
     levelStart: function (x, amountOfTags, difficulty) {//Initialises and handles levels
+        itemIterator = 0;
         levelList = app.genList(x, amountOfTags, difficulty);
         currentNFC = levelList[0];
         nextNFC = levelList[1];
+        app.updateLevel();
         app.showSteps();
     },
 
