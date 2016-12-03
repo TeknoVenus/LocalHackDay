@@ -77,18 +77,23 @@ var app = {
     updateLevel: function(){
       var currentNFC = levelList[itemIterator];
       var nextNFC = levelList[itemIterator + 1];
-      document.body.style.background = colours[itemIterator];
+
       scoreboard.innerText = score;
 
       if (readNFC == nextNFC){
         itemIterator += 1;
         console.log("SUCCESS");
+        readNFC = "";
         score += difficulty;
         currentNFC = levelList[itemIterator];
         nextNFC = levelList[itemIterator + 1];
 
 
       }
+
+
+
+
       if (!(Number.isInteger(nextNFC))){
         console.log("NEXT LEVEL");
         itemIterator = 0;
@@ -108,7 +113,7 @@ var app = {
         app.updateLevel();
         app.showSteps();
 
-        if (levelList.length > 1) {
+        if (levelList.length > 2) {
             app.showSteps();
         }
 
@@ -131,6 +136,20 @@ var app = {
         window.setTimeout(function () {
             modal.style.display = "none";
         }, 2000)
+    },
+
+    showInstructions: function () {
+        var modal = document.querySelector('.modal');
+        modal.style.display = "block";
+        var node = document.createElement("p");
+        var text = document.createTextNode("Welcome to MEMO DASH! You will be shown a sequence of colours, run to them and tap them with a compatible device running the app");
+        node.appendChild(text);
+        document.querySelector('#instructions #list').appendChild(node);
+
+
+        window.setTimeout(function () {
+            modal.style.display = "none";
+        }, 15000);
     },
 
     timer: function () {
@@ -164,6 +183,10 @@ var app = {
             },
             failure
         );
+        app.showInstructions();
+        window.setTimeout(function () {
+            modal.style.display = "none";
+        }, 15000);
         app.showCountdown();
     },
     onNdef: function (nfcEvent) {
@@ -174,7 +197,23 @@ var app = {
         var tagValue = nfc.bytesToString(nfcEvent.tag.ndefMessage[0].payload);
         document.querySelector("#nfc").innerText = tagValue;
         readNFC = parseInt(tagValue);
+          document.body.style.background = colours[readNFC];
+        if (readNFC != levelList[itemIterator+1]){
+          console.log(readNFC);
+          console.log(nextNFC);
+        alert("GAME OVER!");
+        location.reload();
+      }
         app.updateLevel();
+
+
+
+
+
+
+
+
+
 
         console.log("The read tag was " + readNFC);
         console.log("Next tag to be read is " + levelList[itemIterator + 1]);
