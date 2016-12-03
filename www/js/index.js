@@ -93,7 +93,6 @@ var app = {
         itemIterator += 1;
         console.log("SUCCESS");
         readNFC = "";
-        score += difficulty;
         currentNFC = levelList[itemIterator];
         nextNFC = levelList[itemIterator + 1];
 
@@ -107,13 +106,13 @@ var app = {
         console.log("NEXT LEVEL");
         itemIterator = 0;
         difficulty += 1;
-        score += difficulty*10;
+        score += parseInt(2*difficulty*(30/totalSeconds));
         app.levelStart(0, 6, difficulty);
       }
     },
 
     levelStart: function (x, amountOfTags, difficulty) {//Initialises and handles levels
-
+        totalSeconds = 0;
         itemIterator = 0;
         levelList = app.genList(x, amountOfTags, difficulty);
         currentNFC = levelList[0];
