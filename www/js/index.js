@@ -23,9 +23,11 @@ var t = new Date();
 var itemIterator = 0;
 var levelComplete = false;
 var levelList;
-var difficulty = 1;
+var difficulty = 2;
 var totalSeconds = 0;
 var colours = ["red", "rebeccapurple", "blue", "cyan", "yellow", "green", "white"];
+var score = 0;
+var scoreboard = document.getElementById("scoreboard");
 
 var app = {
     // Application Constructor
@@ -34,6 +36,7 @@ var app = {
         app.levelStart(0, 6, difficulty);
         console.log(levelList);
         app.timer();
+
     },
 
     genList: function (x, y, n) {//Generates a random array
@@ -54,10 +57,12 @@ var app = {
       var currentNFC = levelList[itemIterator];
       var nextNFC = levelList[itemIterator + 1];
       document.body.style.background = colours[itemIterator];
+      scoreboard.innerText = score;
 
       if (readNFC == nextNFC){
         itemIterator += 1;
         console.log("SUCCESS");
+        score += difficulty;
         currentNFC = levelList[itemIterator];
         nextNFC = levelList[itemIterator + 1];
 
@@ -67,11 +72,13 @@ var app = {
         console.log("NEXT LEVEL");
         itemIterator = 0;
         difficulty += 1;
+        score += difficulty*10;
         app.levelStart(0, 6, difficulty);
       }
     },
 
     levelStart: function (x, amountOfTags, difficulty) {//Initialises and handles levels
+
         itemIterator = 0;
         levelList = app.genList(x, amountOfTags, difficulty);
         currentNFC = levelList[0];
