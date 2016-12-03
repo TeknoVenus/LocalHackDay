@@ -151,5 +151,6 @@ h1 {
 
 #countdown {
     font-size: 2em;
-    margin: auto;
+    margin-left: auto;
+    margin-right: auto;
 }

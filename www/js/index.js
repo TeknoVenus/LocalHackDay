@@ -26,6 +26,15 @@ var levelList;
 var difficulty = 2;
 var totalSeconds = 0;
 var colours = ["rgb(220,30,120)", "rgb(230,50,20)", "rgb(130,20,140)", "tgb(150,230,50)", "rgb(230,230,50)", "rgb(40, 180, 230)", "rgb(250, 110, 10)"];
+var readableColours = {
+    0: "Pink",
+    1: "Red",
+    2: "Purple",
+    3: "Green",
+    4: "Yellow",
+    5: "Blue",
+    6: "Orange"
+};
 var score = 0;
 var scoreboard = document.getElementById("score");
 var countdown = 3;
@@ -49,7 +58,7 @@ var app = {
         countdownModal.style.display = "block";
 
         var interval = setInterval(function () {
-            content.innerText = countdown.toString();
+            content.innerHTML = "<p>" + countdown.toString() + "</p>";
             countdown -= 1;
         }, 1000);
 
@@ -57,7 +66,7 @@ var app = {
             clearInterval(interval);
             countdownModal.style.display = "none";
             app.startGame();
-        }, 4000)
+        }, 4000);
     },
 
     genList: function (x, y, n) {//Generates a random array
@@ -127,7 +136,7 @@ var app = {
         levelList.forEach(function (item, index) {
             if (index > 0) {
                 var node = document.createElement("li");
-                var text = document.createTextNode(item.toString());
+                var text = document.createTextNode(readableColours[item]);
                 node.appendChild(text);
                 document.querySelector('#instructions #list').appendChild(node);
             }
