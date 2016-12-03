@@ -49,11 +49,13 @@ var app = {
       var currentNFC = levelList[itemIterator];
       var nextNFC = levelList[itemIterator + 1];
       if (itemIterator == levelList.length){
-        levelComplete = true;
+        console.log("EXIT")
       }
       if (readNFC == nextNFC){
         itemIterator += 1;
         console.log("SUCCESS");
+        currentNFC = levelList[itemIterator];
+        nextNFC = levelList[itemIterator + 1];
       }
     },
 
@@ -91,18 +93,14 @@ var app = {
     },
     onNdef: function (nfcEvent) {
         navigator.vibrate(300);
-        console.log(JSON.stringify(nfcEvent));
+        //console.log(JSON.stringify(nfcEvent));
         var tagData = nfcEvent.tag;
         var tagValue = nfc.bytesToString(nfcEvent.tag.ndefMessage[0].payload);
         document.querySelector("#nfc").innerText = tagValue;
         readNFC = parseInt(tagValue);
-        if (app.isNext()){
-          console.log("IS NEXT");
-        }
         app.updateLevel();
         console.log("The read tag was "+readNFC);
-        console.log("Next tag to be read is "+nextNFC);
-        console.log("The last current tag is "+currentNFC);
+        console.log("Next tag to be read is "+ levelList[itemIterator + 1]);
     },
 
 
