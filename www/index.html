@@ -39,9 +39,16 @@
         <div class="app">
             <h1>Local Hack Day</h1>
             <br>
-            <h1><span id="mins"></span> : <span id="secs"></span></h1>
-            <br>
+            <h2>Time taken - <span id="mins"></span> : <span id="secs"></span></h2>
             <h2 id="nfc">Please scan an NFC tag</h2>
+            <br>
+            <div id="scoreboard">
+                SCORE:
+                <span id="score">
+            </span>
+            </div>
+
+
         </div>
 
         <div class="modal">
@@ -54,7 +61,10 @@
                 </span>
             </div>
         </div>
-        <div id="scoreboard">
+
+        <div id="countdown" class="modal">
+            <div class="modal-content">
+            </div>
         </div>
 
         <script type="text/javascript" src="cordova.js"></script>

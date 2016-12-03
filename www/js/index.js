@@ -27,16 +27,37 @@ var difficulty = 2;
 var totalSeconds = 0;
 var colours = ["red", "rebeccapurple", "blue", "cyan", "yellow", "green", "white"];
 var score = 0;
-var scoreboard = document.getElementById("scoreboard");
+var scoreboard = document.getElementById("score");
+var countdown = 3;
 
 var app = {
     // Application Constructor
     initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+    },
+
+    startGame: function() {
+        app.playGameMusic();
         app.levelStart(0, 6, difficulty);
         console.log(levelList);
         app.timer();
+    },
 
+    showCountdown: function() {
+        var countdownModal = document.querySelector('#countdown');
+        var content = document.querySelector('#countdown .modal-content');
+        countdownModal.style.display = "block";
+
+        var interval = setInterval(function () {
+            content.innerText = countdown.toString();
+            countdown -= 1;
+        }, 1000);
+
+        window.setTimeout(function () {
+            clearInterval(interval);
+            countdownModal.style.display = "none";
+            app.startGame();
+        }, 3000)
     },
 
     genList: function (x, y, n) {//Generates a random array
@@ -143,8 +164,10 @@ var app = {
             },
             failure
         );
+        app.showCountdown();
     },
     onNdef: function (nfcEvent) {
+        app.playScanSound();
         navigator.vibrate(300);
         //console.log(JSON.stringify(nfcEvent));
         var tagData = nfcEvent.tag;
@@ -152,12 +175,20 @@ var app = {
         document.querySelector("#nfc").innerText = tagValue;
         readNFC = parseInt(tagValue);
         app.updateLevel();
+
         console.log("The read tag was " + readNFC);
         console.log("Next tag to be read is " + levelList[itemIterator + 1]);
     },
 
+    playScanSound: function() {
+        var media = new Media('file://android_asset/www/scan.wav', function() {console.log("Audio success")}, function() { console.log("Audio error scan sfx")});
+        media.play();
+    },
 
+    playGameMusic: function() {
+        var media = new Media('file://android_asset/www/song.mp3');
+        media.play();
+    }
 };
-
 
 app.initialize();
