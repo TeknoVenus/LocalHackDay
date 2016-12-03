@@ -57,7 +57,7 @@ var app = {
             clearInterval(interval);
             countdownModal.style.display = "none";
             app.startGame();
-        }, 3000)
+        }, 4000)
     },
 
     genList: function (x, y, n) {//Generates a random array
@@ -149,7 +149,8 @@ var app = {
 
         window.setTimeout(function () {
             modal.style.display = "none";
-        }, 15000);
+            app.showCountdown();
+        }, 10000);
     },
 
     timer: function () {
@@ -184,10 +185,6 @@ var app = {
             failure
         );
         app.showInstructions();
-        window.setTimeout(function () {
-            modal.style.display = "none";
-        }, 15000);
-        app.showCountdown();
     },
     onNdef: function (nfcEvent) {
         app.playScanSound();
@@ -208,24 +205,17 @@ var app = {
 
 
 
-
-
-
-
-
-
-
         console.log("The read tag was " + readNFC);
         console.log("Next tag to be read is " + levelList[itemIterator + 1]);
     },
 
     playScanSound: function() {
-        var media = new Media('file://android_asset/www/scan.wav', function() {console.log("Audio success")}, function() { console.log("Audio error scan sfx")});
+        var media = new Media('file:///android_asset/www/scan.wav', function() {console.log("Audio success")}, function() { console.log("Audio error scan sfx")});
         media.play();
     },
 
     playGameMusic: function() {
-        var media = new Media('file://android_asset/www/song.mp3');
+        var media = new Media('file:///android_asset/www/song.mp3');
         media.play();
     }
 };
