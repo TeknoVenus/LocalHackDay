@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var readNFC = 0;
-var nextNFC = 1;
-var currentNFC = 0;
+var readNFC;
+var nextNFC;
+var currentNFC;
 var t = new Date();
 var itemIterator = 0;
 var levelComplete = false;
@@ -28,7 +28,7 @@ var app = {
     // Application Constructor
     initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-        app.levelStart(1, 7, 5);
+        app.levelStart(1, 7, 50);
     },
 
     genList: function(x, y, n){//Generates a random array
@@ -53,12 +53,14 @@ var app = {
       }
       if (readNFC == nextNFC){
         itemIterator += 1;
-        console.log("Your next tag is " + nextNFC);
+        console.log("SUCCESS");
       }
     },
 
     levelStart: function(x, amountOfTags, difficulty){//Initialises and handles levels
       levelList = app.genList(x, amountOfTags, difficulty);
+      currentNFC = levelList[0];
+      nextNFC = levelList[1];
     },
 
 
@@ -95,11 +97,12 @@ var app = {
         document.querySelector("#nfc").innerText = tagValue;
         readNFC = parseInt(tagValue);
         if (app.isNext()){
-          currentNFC = readNFC;
+          console.log("IS NEXT");
         }
         app.updateLevel();
+        console.log("The read tag was "+readNFC);
         console.log("Next tag to be read is "+nextNFC);
-        console.log("The last tag read was "+currentNFC);
+        console.log("The last current tag is "+currentNFC);
     },
 
 
