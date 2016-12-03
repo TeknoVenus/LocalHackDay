@@ -63,19 +63,21 @@ var app = {
         levelList = app.genList(x, amountOfTags, difficulty);
         currentNFC = levelList[0];
         nextNFC = levelList[1];
+        app.showSteps();
     },
 
-    showSteps: function (nextNFC, clear) {
+    showSteps: function () {
         var modal = document.querySelector('.modal');
         modal.style.display = "block";
-        if (clear) {
             document.querySelector('#instructions #list').innerHTML = '';
-        }
 
-        var node = document.createElement("li");
-        var text = document.createTextNode(nextNFC.toString());
-        node.appendChild(text);
-        document.querySelector('#instructions #list').appendChild(node);
+        levelList.forEach(function(item, index) {
+            var node = document.createElement("li");
+            var text = document.createTextNode(item.toString());
+            node.appendChild(text);
+            document.querySelector('#instructions #list').appendChild(node);
+        });
+
         window.setTimeout(function () {
             modal.style.display = "none";
         }, 2000)
