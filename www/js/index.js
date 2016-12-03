@@ -16,6 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+ var t = Date()
+ function genList(x, y, n){
+   var array = Array(n);
+   for (var i = 0; i < n; i++){
+     array[i] = Math.round((Math.random()*y)-x);
+   }
+   return array;
+ }
+
+function levelStart(x, amountOfTags, difficulty){
+  levelList = genList(x, amountOfTags, difficulty);
+  var dt = t.getDate();
+
+
+  return dt;
+}
+
+function game(){
+  var x = 1;
+  var difficulty = 4;
+  var amountOfTags = 3;
+
+  levelStart(x, amountOfTags, difficulty);
+  //GET LEVEL array
+
+  //START - Timer start, show next tag
+}
+
 var app = {
     // Application Constructor
     initialize: function() {
