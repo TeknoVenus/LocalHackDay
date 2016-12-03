@@ -23,18 +23,20 @@ var t = new Date();
 var itemIterator = 0;
 var levelComplete = false;
 var levelList;
+var difficulty = 1;
 
 var app = {
     // Application Constructor
     initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
-        app.levelStart(1, 7, 50);
+        app.levelStart(0, 6, difficulty);
+        console.log(levelList);
     },
 
     genList: function(x, y, n){//Generates a random array
       var array = new Array(n);
       for (var i = 0; i < n; i++){
-        array[i] = Math.round((Math.random()*y)-x);
+        array[i] = Math.round((Math.random()*y)+x);
       }
       return array;
     },
@@ -48,14 +50,17 @@ var app = {
     updateLevel: function(){
       var currentNFC = levelList[itemIterator];
       var nextNFC = levelList[itemIterator + 1];
-      if (itemIterator == levelList.length){
-        console.log("EXIT")
-      }
       if (readNFC == nextNFC){
         itemIterator += 1;
         console.log("SUCCESS");
         currentNFC = levelList[itemIterator];
         nextNFC = levelList[itemIterator + 1];
+
+      }
+      if (!(nextNFC in levelList)){
+        console.log("NEXT LEVEL");
+        difficulty += 1;
+        app.levelStart(0, 6, difficulty);
       }
     },
 
