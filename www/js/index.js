@@ -16,64 +16,62 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-var readNFC = "Empty";
+var readNFC = 0;
+var nextNFC = 1;
+var currentNFC = 0;
 var t = new Date();
+var itemIterator = 0;
+var levelComplete = false;
+var levelList;
 
 var app = {
     // Application Constructor
     initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+        app.levelStart(1, 7, 5);
     },
 
     genList: function(x, y, n){//Generates a random array
-      var array = Array(n);
+      var array = new Array(n);
       for (var i = 0; i < n; i++){
         array[i] = Math.round((Math.random()*y)-x);
       }
       return array;
     },
 
-    levelStart: function(x, amountOfTags, difficulty){//Initialises and handles levels
-      levelList = app.genList(x, amountOfTags, difficulty);
-      var t1 = t.getDate();
+    isNext: function(){
+      if (readNFC == nextNFC){
+        return true;
+    }
+  },
 
-      var itemIterator = 0;
-      var levelComplete = false;
-      while(levelComplete == false){
-        var currentNFC = levelList[itemIterator];
-        var nextNFC = levelList[itemIterator + 1];
-        if (itemIterator == levelList.length){
-          levelComplete = true;
-        }
-        if (readNFC == nextNFC){
-          itemIterator += 1;
-          console.log("Your next tag is " + nextNFC);
-        }
-        else{
-          console.log("SEARCHING");
-        }
+    updateLevel: function(){
+      var currentNFC = levelList[itemIterator];
+      var nextNFC = levelList[itemIterator + 1];
+      if (itemIterator == levelList.length){
+        levelComplete = true;
       }
-      var t2 = t.getDate();
-      return t2 - t1;
+      if (readNFC == nextNFC){
+        itemIterator += 1;
+        console.log("Your next tag is " + nextNFC);
+      }
     },
 
-    game: function(){//Main game function
-      var x = 1;
-      var difficulty = 4;
-      var amountOfTags = 3;
+    levelStart: function(x, amountOfTags, difficulty){//Initialises and handles levels
+      levelList = app.genList(x, amountOfTags, difficulty);
+    },
 
-      var score1 = app.levelStart(x, amountOfTags, difficulty);
-      console.log(score1);
+
      //GET LEVEL array
 
      //START - Timer start, show next tag
-   },
+
 
     // deviceready Event Handler
     //
     // Bind any cordova events here. Common events are:
     // 'pause', 'resume', etc.
-    onDeviceReady: function () {
+    onDeviceReady: function(){
         function failure(reason) {
             alert("There was a problem - " + reason);
         }
@@ -86,7 +84,7 @@ var app = {
             },
             failure
         );
-        app.game();
+
 
     },
     onNdef: function (nfcEvent) {
@@ -96,6 +94,12 @@ var app = {
         var tagValue = nfc.bytesToString(nfcEvent.tag.ndefMessage[0].payload);
         document.querySelector("#nfc").innerText = tagValue;
         readNFC = parseInt(tagValue);
+        if (app.isNext()){
+          currentNFC = readNFC;
+        }
+        app.updateLevel();
+        console.log("Next tag to be read is "+nextNFC);
+        console.log("The last tag read was "+currentNFC);
     },
 
 
