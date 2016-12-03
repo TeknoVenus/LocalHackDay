@@ -33,6 +33,7 @@ var app = {
     // Application Constructor
     initialize: function () {
         document.addEventListener('deviceready', this.onDeviceReady.bind(this), false);
+
         app.levelStart(0, 6, difficulty);
         console.log(levelList);
         app.timer();
@@ -56,7 +57,7 @@ var app = {
     updateLevel: function(){
       var currentNFC = levelList[itemIterator];
       var nextNFC = levelList[itemIterator + 1];
-      document.body.style.background = colours[itemIterator];
+
       scoreboard.innerText = score;
 
       if (readNFC == nextNFC){
@@ -87,7 +88,7 @@ var app = {
         app.updateLevel();
         app.showSteps();
 
-        if (levelList.length > 1) {
+        if (levelList.length > 2) {
             app.showSteps();
         }
 
@@ -110,6 +111,20 @@ var app = {
         window.setTimeout(function () {
             modal.style.display = "none";
         }, 2000)
+    },
+
+    showInstructions: function () {
+        var modal = document.querySelector('.modal');
+        modal.style.display = "block";
+        var node = document.createElement("p");
+        var text = document.createTextNode("Welcome to MEMO DASH! You will be shown a sequence of colours, run to them and tap them with a compatible device running the app");
+        node.appendChild(text);
+        document.querySelector('#instructions #list').appendChild(node);
+
+
+        window.setTimeout(function () {
+            modal.style.display = "none";
+        }, 15000);
     },
 
     timer: function () {
@@ -143,6 +158,10 @@ var app = {
             },
             failure
         );
+        app.showInstructions();
+        window.setTimeout(function () {
+            modal.style.display = "none";
+        }, 15000);
     },
     onNdef: function (nfcEvent) {
         navigator.vibrate(300);
@@ -152,6 +171,7 @@ var app = {
         document.querySelector("#nfc").innerText = tagValue;
         readNFC = parseInt(tagValue);
         app.updateLevel();
+        document.body.style.background = colours[readNFC];
         console.log("The read tag was " + readNFC);
         console.log("Next tag to be read is " + levelList[itemIterator + 1]);
     },
